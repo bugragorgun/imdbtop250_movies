@@ -25,10 +25,14 @@ class BestMoviesSpider(CrawlSpider):
     #     request.headers['User-Agent']=self.user_agent
 
     def parse_item(self, response):
+        duration = response.xpath("(//li[@class='ipc-inline-list__item'])[3]/text()").getall()
+        duration_string = "".join(duration)
+
         yield{
             'title': response.xpath("//div[@class='sc-94726ce4-1 iNShGo']/h1/text()").get(),
             'year': response.xpath("//span[@class='sc-8c396aa2-2 itZqyK']/text()").get(),
-            'duration': response.xpath("(//li[@class='ipc-inline-list__item'])[3]/text()").get(),
+            # 'duration': response.xpath("(//li[@class='ipc-inline-list__item'])[3]/text()").getall(),
+            'duration': duration_string,
             'rate': response.xpath("(//span[@class='sc-7ab21ed2-1 jGRxWM'])[2]/text()").get(),
             'movie_url': response.url,
             # 'user_agent': response.request.headers['User-Agent']
